@@ -205,6 +205,16 @@ class SimpleNamespace(Namespace):
     def set_auto_exposure_logging(self, value):
         self._experiment.set_auto_exposure_logging(value)
 
+    def get_choice(self, name, default=None, **kwargs):
+        self.inputs = kwargs
+        self._experiment = None
+        self._assign_experiment()
+        if self._experiment is None:
+            val = self.default_get(name, default)
+        else:
+            val = self._experiment.get(name, self.default_get(name, default))
+        return val
+
     @requires_experiment
     def get(self, name, default=None):
         if self._experiment is None:
