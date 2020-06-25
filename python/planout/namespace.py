@@ -126,18 +126,18 @@ class SimpleNamespace(Namespace):
 
         # randomly select the given number of segments from all available
         # segments
-        a = Assignment(self.name)
+        a = Assignment("null")
         if 'use_fast_sample' in self.inputs:
-            a.sampled_segments = \
+            a.x = \
                 FastSample(choices=list(self.available_segments),
                     draws=segments, unit=name)
         else:
-            a.sampled_segments = \
+            a.x = \
                 Sample(choices=list(self.available_segments),
                        draws=segments, unit=name)
 
         # assign each segment to the experiment name
-        for segment in a.sampled_segments:
+        for segment in a.x:
             self.segment_allocations[segment] = name
             self.available_segments.remove(segment)
 
@@ -161,10 +161,10 @@ class SimpleNamespace(Namespace):
 
     def get_segment(self):
         # randomly assign primary unit to a segment
-        a = Assignment(self.name)
-        a.segment = RandomInteger(min=0, max=self.num_segments - 1,
+        a = Assignment("null")
+        a.x = RandomInteger(min=0, max=self.num_segments - 1,
                                   unit=itemgetter(*self.primary_unit)(self.inputs))
-        return a.segment
+        return a.x
 
     def _assign_experiment(self):
         "assign primary unit to an experiment"
